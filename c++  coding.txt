@@ -1,0 +1,305 @@
+1.SIMPLE CALCULATOR
+
+
+// Online C++ compiler to run C++ program online
+#include <iostream>
+using namespace std;
+int main() {
+   char op;
+   int num1,num2;
+   cout<<"Enter operator";
+   cin>>op;
+   cout<<"Enter two numbers";
+   cin>>num1>>num2;
+   switch(op)
+   {
+       case '+':
+       cout<<num1<<"+"<<num2<<"="<<num1+num2;
+       break;
+       case '-':
+       cout<<num1<<"-"<<num2<<"="<<num1-num2;
+       break;
+       case '*':
+       cout<<num1<<"*"<<num2<<"="<<num1*num2;
+       break;
+       case '/':
+       cout<<num1<<"/"<<num2<<"="<<num1/num2;
+       break;
+       
+   }
+}
+
+
+
+
+
+2.NUMBER GUESSING GAME
+
+
+cpp
+Copy code
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    // Seed the random number generator with the current time
+    std::srand(static_cast<unsigned int>(std::time(0)));
+    
+    // Generate a random number between 1 and 100
+    int randomNumber = std::rand() % 100 + 1;
+    int userGuess = 0;
+
+    std::cout << "Guess the number (between 1 and 100): ";
+
+    // Loop until the user guesses the correct number
+    while (true) {
+        std::cin >> userGuess;
+
+        if (userGuess < randomNumber) {
+            std::cout << "Too low. Try again: ";
+        } else if (userGuess > randomNumber) {
+            std::cout << "Too high. Try again: ";
+        } else {
+            std::cout << "Congratulations! You guessed the correct number: " << randomNumber << std::endl;
+            break;
+        }
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+3.TIC-TAC-TOE GAME 
+
+
+
+
+cpp
+Copy code
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class TicTacToe {
+private:
+    vector<vector<char>> board;
+    char currentPlayer;
+
+public:
+    TicTacToe() {
+        board = vector<vector<char>>(3, vector<char>(3, ' '));
+        currentPlayer = 'X';
+    }
+
+    void displayBoard() {
+        cout << "Current board state:\n";
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                cout << board[i][j];
+                if (j < 2) cout << " | ";
+            }
+            cout << "\n";
+            if (i < 2) cout << "--|---|--\n";
+        }
+    }
+
+    bool makeMove(int row, int col) {
+        if (row < 0 || row >= 3 || col < 0 || col >= 3 || board[row][col] != ' ') {
+            return false;
+        }
+        board[row][col] = currentPlayer;
+        return true;
+    }
+
+    bool checkWin() {
+        for (int i = 0; i < 3; ++i) {
+            if (board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) return true;
+            if (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer) return true;
+        }
+        if (board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) return true;
+        if (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer) return true;
+        return false;
+    }
+
+    bool checkDraw() {
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                if (board[i][j] == ' ') return false;
+            }
+        }
+        return true;
+    }
+
+    void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    char getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    void resetBoard() {
+        board = vector<vector<char>>(3, vector<char>(3, ' '));
+        currentPlayer = 'X';
+    }
+};
+
+int main() {
+    TicTacToe game;
+    int row, col;
+    char playAgain;
+
+    do {
+        game.resetBoard();
+        bool gameOver = false;
+
+        while (!gameOver) {
+            game.displayBoard();
+            cout << "Player " << game.getCurrentPlayer() << ", enter your move (row and column): ";
+            cin >> row >> col;
+
+            if (!game.makeMove(row - 1, col - 1)) {
+                cout << "Invalid move! Try again.\n";
+                continue;
+            }
+
+            if (game.checkWin()) {
+                game.displayBoard();
+                cout << "Player " << game.getCurrentPlayer() << " wins!\n";
+                gameOver = true;
+            } else if (game.checkDraw()) {
+                game.displayBoard();
+                cout << "The game is a draw!\n";
+                gameOver = true;
+            } else {
+                game.switchPlayer();
+            }
+        }
+
+        cout << "Do you want to play again? (y/n): ";
+        cin >> playAgain;
+    } while (playAgain == 'y');
+
+    cout << "Thanks for playing!\n";
+    return 0;
+}
+
+
+
+
+
+4.TO - DO LIST
+
+
+
+cpp
+Copy code
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class Task {
+public:
+    string description;
+    bool isCompleted;
+
+    Task(const string& desc) : description(desc), isCompleted(false) {}
+};
+
+class ToDoList {
+private:
+    vector<Task> tasks;
+
+public:
+    void addTask(const string& task) {
+        tasks.push_back(Task(task));
+        cout << "Task added: " << task << endl;
+    }
+
+    void viewTasks() const {
+        if (tasks.empty()) {
+            cout << "No tasks to show." << endl;
+        } else {
+            cout << "Tasks:" << endl;
+            for (size_t i = 0; i < tasks.size(); ++i) {
+                cout << i + 1 << ". " << tasks[i].description 
+                     << " [" << (tasks[i].isCompleted ? "Completed" : "Pending") << "]" << endl;
+            }
+        }
+    }
+
+    void markTaskCompleted(int index) {
+        if (index < 1 || index > tasks.size()) {
+            cout << "Invalid task number." << endl;
+        } else {
+            tasks[index - 1].isCompleted = true;
+            cout << "Task marked as completed: " << tasks[index - 1].description << endl;
+        }
+    }
+
+    void deleteTask(int index) {
+        if (index < 1 || index > tasks.size()) {
+            cout << "Invalid task number." << endl;
+        } else {
+            cout << "Task deleted: " << tasks[index - 1].description << endl;
+            tasks.erase(tasks.begin() + index - 1);
+        }
+    }
+};
+
+int main() {
+    ToDoList toDoList;
+    int choice;
+    string task;
+    int taskNumber;
+
+    do {
+        cout << "\nTo-Do List Manager\n";
+        cout << "1. Add Task\n";
+        cout << "2. View Tasks\n";
+        cout << "3. Mark Task as Completed\n";
+        cout << "4. Delete Task\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter task description: ";
+                cin.ignore(); // To ignore the newline character left in the input buffer
+                getline(cin, task);
+                toDoList.addTask(task);
+                break;
+            case 2:
+                toDoList.viewTasks();
+                break;
+            case 3:
+                cout << "Enter task number to mark as completed: ";
+                cin >> taskNumber;
+                toDoList.markTaskCompleted(taskNumber);
+                break;
+            case 4:
+                cout << "Enter task number to delete: ";
+                cin >> taskNumber;
+                toDoList.deleteTask(taskNumber);
+                break;
+            case 5:
+                cout << "Exiting the To-Do List Manager. Goodbye!" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+                break;
+        }
+    } while (choice != 5);
+
+    return 0;
+}
+   
